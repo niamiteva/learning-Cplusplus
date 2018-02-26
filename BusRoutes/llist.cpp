@@ -8,62 +8,63 @@ using namespace std;
 template <class T>
 struct elem_link1
 {
-  T inf;
-  elem_link1 *link;
+  T inf; // cointains the data of the current element
+  elem_link1 *link; // pointer to the next element
 };
 
 template <class T>
 class LList
 {
 public:
-  LList();
-  ~LList();
-  LList(LList const&);
-  LList& operator=(LList const &);
-  void print();
-  void IterStart(elem_link1<T>* = NULL);
-  elem_link1<T>* Iter();
-  void ToEnd(T const &);
+  LList();// constructor
+  ~LList(); //destructor
+  LList(LList const&); //copy constructor
+  LList& operator=(LList const &); // operator=
+  
+  void print();//prints the list
+  void IterStart(elem_link1<T>* = NULL);//puts the pointer at the beginning of the list
+  elem_link1<T>* Iter();//iterator
+  void ToEnd(T const &);//adds element at the end of the list
 
-  void InsertAfter(elem_link1<T> *, T const &);
-  void InsertBefore(elem_link1<T> *, T const &);
+  void InsertAfter(elem_link1<T> *, T const &); // adds element after the pointed element
+  void InsertBefore(elem_link1<T> *, T const &);// add element before the pointed element
 
-  int DeleteAfter(elem_link1<T> *, T &);
-  int DeleteBefore(elem_link1<T> *, T &);
-  void DeleteElem(elem_link1<T> *, T &);
+  int DeleteAfter(elem_link1<T> *, T &); // deletes element after the pointed element
+  int DeleteBefore(elem_link1<T> *, T &); //deletes element before the pointed element
+  void DeleteElem(elem_link1<T> *, T &); // deletes element from position p
 
-  bool empty();
-  int len();
-  void concat(LList const&);
-  void reverse();
+  bool empty();// checks if the list is empty
+  int len(); // returns the length of the list
+  void concat(LList const&);// concatenate two lists
+  void reverse(); // reverse list
 
   T operator[](int idx);
 private:
-  elem_link1<T> *Start, *End, *Current;
-  void DeleteList();
+  elem_link1<T> *Start, *End, *Current; // pointers
+  void DeleteList(); // helepr functions
   void CopyList(LList<T> const &);
 };
 
-
+//constructor
 template <class T>
 LList<T>::LList()
 {
   Start = NULL;
   End = NULL;
 }
-
+//destructor
 template <class T>
 LList<T>::~LList()
 {
   DeleteList();
 }
-
+//copy constructor
 template <class T>
 LList<T>::LList(LList<T> const& r)
 {
   CopyList(r);
 }
-
+//operator=
 template <class T>
 LList<T>& LList<T>::operator=(LList<T> const & r)
 {
@@ -74,10 +75,11 @@ LList<T>& LList<T>::operator=(LList<T> const & r)
   }
   return *this;
 }
-
+//helper
 template <class T>
 void LList<T>::DeleteList()
 {
+  //deletes all elements from the start to the end
   elem_link1<T> *p;
   while(Start)
   {
@@ -87,10 +89,11 @@ void LList<T>::DeleteList()
   }
   End = NULL;
 }
-
+//helper
 template <class T>
 void LList<T>::CopyList(LList<T> const & r)
 {
+  //copy all the elemnts from a list 
   Start = End = NULL;
   if(r.Start)
   {
@@ -138,8 +141,8 @@ void LList<T>::ToEnd(T const & x)
   End = new elem_link1<T>;
   End->inf = x;
   End->link = NULL;
-  if(Current) Current->link = End;
-  else Start = End;
+  if(Current) Current->link = End; 
+  else Start = End;// if this is the first element of the list
 }
 
 template <class T>
@@ -148,7 +151,7 @@ void LList<T>::InsertAfter(elem_link1<T> *p, T const & x)
   elem_link1<T> *q = new elem_link1<T>;
   q->inf = x;
   q->link = p->link;
-  if(p==End) End = q;
+  if(p==End) End = q;//if the current element is the last the new elemnt wil now be the last
   p->link = q;
 }
 
@@ -156,7 +159,7 @@ template <class T>
 void LList<T>::InsertBefore(elem_link1<T> * p, T const& x)
 {
   elem_link1<T> *q = new elem_link1<T>;
-  *q = *p;
+  *q = *p;// we exchange the addresses
   if(p==End) End = q;
   p->inf = x;
   p->link = q;
