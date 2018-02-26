@@ -7,35 +7,36 @@ template <typename T>
 class graph
 {
 	public:
-		void addTop(const T&);
-		void deleteTop(const T&);
-		void addRib(const T&, const T&);
-		void deleteRib(const T&, const T&);
-		bool top(const T&);
-		bool rib(const T&, const T&);
-		bool empty() const;
-		elem_link1<T>* point(const T&);
-		LList<T> vertexes();
-		void print();
+		void addTop(const T&); // adds top in the graph
+		void deleteTop(const T&); //deletes top from the graph
+		void addRib(const T&, const T&); // adds rib from top a to top b in the graph
+		void deleteRib(const T&, const T&); // delete rib from the graph
+		bool top(const T&); // checks if there is top x
+		bool rib(const T&, const T&); // checks if there is rib from top x to top y
+		bool empty() const; // checks if the graph is empty
+		elem_link1<T>* point(const T&); // returns the adress of a top x
+		LList<T> vertexes(); // returns linked list with all the vertexes of the graph
+		void print(); // prints the graph
 	private:
-		LList< LList<T> > g;
+		LList< LList<T> > g; //graph g
 };
 
-// включва а като връх
+// adds a as a top(node) of the graph
 template <typename T>
 void graph<T>::addTop(const T& a)
-{ // създаване на линеен списък, съдържащ елемента a
+{ 
+	//creating a linked list, containing a
 	LList<T> l;
 	l.ToEnd(a);
-	// включване на върха a към графа
+	// adding the top in the graph
 	g.ToEnd(l);
 }
 
-// изключва върха а
+// deleting the top a from the graph
 template <typename T>
 void graph<T>::deleteTop(const T& a)
-{ // обхождане на графа с цел изтриване на всички
-	// ребра от произволен връх до върха a
+{ 
+	// searching in the graph for all ribs from the current top to top a to be deleted
 	g.IterStart();
 	elem_link1<LList<T> >* p = g.Iter(), *r;
 	while(p)
@@ -45,8 +46,8 @@ void graph<T>::deleteTop(const T& a)
 		if(rib(q->inf, a)) deleteRib(q->inf, a);
 		p = p->link;
 	}
-	// изтриване на линейния списък, представящ
-	// върха a и неговите наследници
+	
+	// deleting the linked list representing the top a and its childs
 	g.IterStart();
 	elem_link1<T>* q;
 	do
@@ -55,19 +56,19 @@ void graph<T>::deleteTop(const T& a)
 		r->inf.IterStart();
 		q = r->inf.Iter();
 	}
-	while(q->inf != a); // a е връх на графа
+	while(q->inf != a); // a is top of the graph
 	LList<T> x;
 	g.deleteElem(r, x);
 }
 
-// включва ребро от върха a до върха b
+//adding rib a from top b in the graph
 template <typename T>
 void graph<T>::addRib(const T& a, const T& b)
-{ // намиране на указател към върха a
-	elem_link1<T>* q = point(a), // намира указател към върха a
+{
+	elem_link1<T>* q = point(a), // finding a pointer to the adsress of the top a
 		*p;
 
-	// включване на върха b в списъка от наследниците на върха a
+	// inserting the top b in the top a's childslist
 	p = new elem_link1<T>;
 
 	p->inf = b;
@@ -75,7 +76,7 @@ void graph<T>::addRib(const T& a, const T& b)
 	q->link = p;
 }
 
-// изключва реброто от върха a до върха b
+//deleteing the rib from top a to top b
 template <typename T>
 void graph<T>::deleteRib(const T& a, const T& b)
 {
@@ -90,13 +91,13 @@ void graph<T>::deleteRib(const T& a, const T& b)
 	}
 	while(q->inf != a);
 	q = q->link;
-	// намиране на указател към наследника b на върха a
+	// finding pointer to the child b of the top a
 	while(q->inf != b) q = q->link;
 	T x;
 	p->inf.deleteElem(q, x);
 }
 
-// проверява дали a е връх
+//checking if a is a top of the graph
 template <typename T>
 bool graph<T>::top(const T& a)
 {
@@ -115,24 +116,24 @@ bool graph<T>::top(const T& a)
 	return q->inf == a;
 }
 
-// проверява дали има ребро от върха a до върха b
+//checking if there is rib from top a to top b
 template <typename T>
 bool graph<T>::rib(const T& a, const T& b)
 {
-	elem_link1<T>* p = point(a); // намира указател към върха a
+	elem_link1<T>* p = point(a); // pointer to the top a
 	p = p->link;
 	while(p && p->inf != b) p = p->link;
 	return p != NULL;
 }
 
-// проверява дали графът е празен
+// check if the graph is empty
 template <typename T>
 bool graph<T>::empty() const
 {
 	return g.empty();
 }
 
-// намира указател към върха a на графа
+// finds pointer to the tp of the graph
 template <typename T>
 elem_link1<T>* graph<T>::point(const T& a)
 {
@@ -149,7 +150,7 @@ elem_link1<T>* graph<T>::point(const T& a)
 	return q;
 }
 
-// връща списък от върховете
+//return list of the nodes
 template <typename T>
 LList<T> graph<T>::vertexes()
 {
