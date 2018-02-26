@@ -8,6 +8,7 @@ using namespace std;
 
 #define MAX 5
 
+//function that generates random digit
 int generateRandomDigit()
 {
 	srand(time(NULL)); //unique word every time
@@ -15,31 +16,35 @@ int generateRandomDigit()
 
 	return num;
 }
-
+//function that generates number(type char*) with four different digits
 void generateNumber(char* a)
 {
 	int digit;
 	digit = generateRandomDigit();
 
+	// the first digit can not be 0
 	while(digit == 0)
-    {
-        digit = generateRandomDigit();
-    }
-    a[0] = (char)(digit+48);
+        {
+		digit = generateRandomDigit();
+    	}
+	//completing the first digit
+    	a[0] = (char)(digit+48);
 
+	//completing the other three
 	for (int i = 1; i < 4;)
 	{
 		digit = generateRandomDigit();
+		// check if the new digit is different from the other digits, if not generate new
 		if ((char)(digit+48) != a[0] && (char)(digit+48)!=a[1] && (char)(digit+48)!=a[2] && (char)(digit+48)!=a[3])
 		{
 			a[i] = (char)(digit+48);
+			//we continue after the digit is different from the other digits
 			i++;
 		}
 		else digit = generateRandomDigit();
 	}
-	cout<<a<<endl;
 }
-
+// check if the input number is with 4 different digits
 bool allDifferent(char* b)
 {
     bool diff = true;
@@ -56,7 +61,7 @@ bool allDifferent(char* b)
     }
     return diff;
 }
-
+// check if all chars in the input are numbers, not letters
 bool allNums(char* b)
 {
     bool isLetter = false;
@@ -71,7 +76,7 @@ bool allNums(char* b)
     return isLetter;
 
 }
-
+// searching for BULLS in the input number
 int findBulls(char* a, char* b)
 {
 	int counter = 0;
@@ -82,7 +87,7 @@ int findBulls(char* a, char* b)
 
 	return counter;
 }
-
+//searching for Cows
 int findCows(char* a, char* b)
 {
 	int counter = 0;
@@ -96,12 +101,13 @@ int findCows(char* a, char* b)
 
 	for (int i = 0; i < 4; i++)
 	{
+		// if we have bulls we have to substract their count from the cows' count
 		if (a[i] == b[i]) counter--;
 	}
 
 	return counter;
 }
-
+//game play
 void bullAndCows(char* a, char* b, int attempts)
 {
 	int bulls = findBulls(a, b);
@@ -115,25 +121,28 @@ void bullAndCows(char* a, char* b, int attempts)
 
 		cout << "Make a guess: ";
 		cin >> b;
-		 while(!allDifferent(b))
-        {
-            cout << "Your number is not valid(all digits should be different).\nMake a new guess: ";
-            cin>>b;
-        }
-        while(allNums(b))
-        {
-            cout << "Your number is not valid(you have letter in your number).\nMake a new guess: ";
-            cin>>b;
-        }
-        while(strlen(b) != 4)
-        {
-            cout << "Your number is not valid(you have more or less than 4 digits).\nMake a new guess: ";
-            cin>>b;
-        }
+		
+		//conditions
+		while(!allDifferent(b))
+		{
+		    cout << "Your number is not valid(all digits should be different).\nMake a new guess: ";
+		    cin>>b;
+		}
+		while(allNums(b))
+		{
+		    cout << "Your number is not valid(you have letter in your number).\nMake a new guess: ";
+		    cin>>b;
+		}
+		while(strlen(b) != 4)
+		{
+		    cout << "Your number is not valid(you have more or less than 4 digits).\nMake a new guess: ";
+		    cin>>b;
+		}
 
 
 		bulls = findBulls(a, b);
 		cows = findCows(a, b);
+		//the user wins
 		if (bulls == 4) break;
 	}
 
@@ -157,24 +166,27 @@ int main()
 
 	generateNumber(a);
 
-    cout << "Enter 4-(DIFFERENT)-digit number to make a guess: ";
-    cin>>b;
-    while(!allDifferent(b))
-    {
-        cout << "Your number is not valid(all digits should be different).\nMake a new guess: ";
+        cout << "Enter 4-(DIFFERENT)-digit number to make a guess: ";
         cin>>b;
-    }
-    while(allNums(b))
-    {
-        cout << "Your number is not valid(you have letter in your number).\nMake a new guess: ";
-        cin>>b;
-    }
-    while(strlen(b) != 4)
-    {
-        cout << "Your number is not valid(you have more or less than 4 digits).\nMake a new guess: ";
-        cin>>b;
-    }
-
+	
+	//conditions
+        while(!allDifferent(b))
+        {
+		cout << "Your number is not valid(all digits should be different).\nMake a new guess: ";
+		cin>>b;
+        }
+        while(allNums(b))
+        {
+		cout << "Your number is not valid(you have letter in your number).\nMake a new guess: ";
+		cin>>b;
+        }
+        while(strlen(b) != 4)
+        {
+		cout << "Your number is not valid(you have more or less than 4 digits).\nMake a new guess: ";
+		cin>>b;
+        }
+	
+	//game function
 	bullAndCows(a, b, attempts);
 
     return 0;
